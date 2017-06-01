@@ -1,0 +1,35 @@
+IF OBJECT_ID('tempdb..#LOGINS') IS NOT NULL
+	DROP TABLE #LOGINS
+;
+
+CREATE TABLE #LOGINS
+(
+LogDate DATETIME
+,ProcessInfo VARCHAR(4000)
+,[Text] VARCHAR(4000)
+);
+INSERT INTO #LOGINS
+EXEC xp_readerrorlog 0, 1, 'Login';
+
+SELECT
+*
+FROM #LOGINS
+WHERE
+	[Text] <> 'Login succeeded for user ''SV\techni''. Connection made using Windows authentication. [CLIENT: <local machine>]'
+AND [Text] <> 'Login succeeded for user ''NT-AUTORITÄT\NETZWERKDIENST''. Connection made using Windows authentication. [CLIENT: <local machine>]'
+AND [Text] <> 'Login succeeded for user ''SV\SQL_C07_STANDARD''. Connection made using Windows authentication. [CLIENT: <local machine>]'
+AND [Text] <> 'Login succeeded for user ''CARGOMNZSR11\Administrator''. Connection made using Windows authentication. [CLIENT: <local machine>]'
+AND [Text] <> 'Login succeeded for user ''CARGOMNZSR11\Administrator''. Connection made using Windows authentication. [CLIENT: 172.24.52.7]'
+
+EXCEPT
+
+SELECT
+*
+FROM #LOGINS
+WHERE
+	[Text] LIKE '%QSS_Admin%'
+OR  [Text] LIKE '%KV_Admin%'
+OR  [Text] LIKE '%Zoll_Admin%'
+OR  [Text] LIKE '%BKU\TobiasHanke%'
+OR  [Text] LIKE '%BKU\ChristianCGraefe%'
+;
