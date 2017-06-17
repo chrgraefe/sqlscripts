@@ -1,8 +1,8 @@
 
 -- SQL Server 2017 Diagnostic Information Queries
 -- Glenn Berry 
--- April 2017
--- Last Modified: April 25, 2017
+-- June 2017
+-- Last Modified: June 14, 2017
 -- https://www.sqlskills.com/blogs/glenn/
 -- http://sqlserverperformance.wordpress.com/
 -- Twitter: GlennAlanBerry
@@ -58,6 +58,7 @@ SELECT @@SERVERNAME AS [Server Name], @@VERSION AS [SQL Server and OS Version In
 -- 14.0.304.138		CTP 1.3				2/17/2017
 -- 14.0.405.198		CTP 1.4				3/20/2017
 -- 14.0.500.272		CTP 2.0				4/19/2017
+-- 14.0.600.250		CTP 2.1				5/17/2017
 		
 															
 
@@ -72,6 +73,14 @@ SELECT @@SERVERNAME AS [Server Name], @@VERSION AS [SQL Server and OS Version In
 -- How to determine the version, edition and update level of SQL Server and its components 
 -- https://support.microsoft.com/en-us/kb/321185
 
+-- SQL Server 2017 Community Technology Preview 2.0 now available
+-- https://blogs.technet.microsoft.com/dataplatforminsider/2017/04/19/sql-server-2017-community-technology-preview-2-0-now-available/
+
+-- What's New in SQL Server 2017 (Database Engine)
+-- https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/what-s-new-in-sql-server-2017-database-engine
+
+-- What's New in SQL Server 2017
+-- https://docs.microsoft.com/en-us/sql/sql-server/what-s-new-in-sql-server-2017
 
 
 -- Get socket, physical core and logical core count from the SQL Server Error log. (Query 2) (Core Counts)
@@ -152,6 +161,7 @@ ORDER BY name OPTION (RECOMPILE);
 -- hadoop connectivity (Configure SQL Server to connect to external Hadoop or Microsoft Azure storage blob data sources through PolyBase)
 -- polybase network encryption (Configure SQL Server to encrypt control and data channels when using PolyBase)
 -- remote data archive (Allow the use of the REMOTE_DATA_ARCHIVE data access for Stretch databases)
+-- clr strict security is new in SQL Server 2017, and is enabled by default
 
 -- SQLSweet16!, Episode 1: Backup Compression for TDE-enabled Databases
 -- https://blogs.msdn.microsoft.com/sqlcat/2016/06/20/sqlsweet16-episode-1-backup-compression-for-tde-enabled-databases/
@@ -269,7 +279,7 @@ ORDER BY name OPTION (RECOMPILE);
 
 -- Host information (Query 11) (Host Info)
 SELECT host_platform, host_distribution, host_release, 
-       host_service_pack_level, host_sku, os_language_version  
+       host_service_pack_level, host_sku, os_language_version 
 FROM sys.dm_os_host_info WITH (NOLOCK) OPTION (RECOMPILE); 
 ------
 
@@ -300,8 +310,8 @@ FROM sys.dm_os_host_info WITH (NOLOCK) OPTION (RECOMPILE);
 
 
 -- SQL Server NUMA Node information  (Query 12) (SQL Server NUMA Info)
-SELECT node_id, node_state_desc, memory_node_id, processor_group, online_scheduler_count, 
-       active_worker_count, avg_load_balance, resource_monitor_state
+SELECT node_id, node_state_desc, memory_node_id, processor_group, cpu_count, online_scheduler_count, 
+       idle_scheduler_count, active_worker_count, avg_load_balance, resource_monitor_state
 FROM sys.dm_os_nodes WITH (NOLOCK) 
 WHERE node_state_desc <> N'ONLINE DAC' OPTION (RECOMPILE);
 ------
@@ -387,14 +397,14 @@ ORDER BY ag.name, ar.replica_server_name, adc.[database_name] OPTION (RECOMPILE)
 
 
 -- Hardware information from SQL Server 2017  (Query 17) (Hardware Info)
-SELECT cpu_count AS [Logical CPU Count], scheduler_count, hyperthread_ratio AS [Hyperthread Ratio],
-cpu_count/hyperthread_ratio AS [Physical CPU Count], 
+SELECT cpu_count AS [Logical CPU Count], scheduler_count, (socket_count * cores_per_socket) AS [Physical CPU Count], 
+socket_count AS [Physical CPU Count], cores_per_socket, numa_node_count,
 physical_memory_kb/1024 AS [Physical Memory (MB)], committed_kb/1024 AS [Committed Memory (MB)],
 committed_target_kb/1024 AS [Committed Target Memory (MB)],
 max_workers_count AS [Max Workers Count], affinity_type_desc AS [Affinity Type], 
 sqlserver_start_time AS [SQL Server Start Time], virtual_machine_type_desc AS [Virtual Machine Type], 
 softnuma_configuration_desc AS [Soft NUMA Configuration], sql_memory_model_desc, 
-process_physical_affinity -- New in SQL Server 2017 CTP 1.0
+process_physical_affinity
 FROM sys.dm_os_sys_info WITH (NOLOCK) OPTION (RECOMPILE);
 ------
 
@@ -465,6 +475,7 @@ FROM sys.dm_os_buffer_pool_extension_configuration WITH (NOLOCK) OPTION (RECOMPI
 
 -- Buffer Pool Extension
 -- https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/buffer-pool-extension
+
 
 
 -- Look at buffer descriptors to see BPE usage by database (Query 22) (BPE Usage) 
@@ -661,15 +672,15 @@ DROP TABLE #IOWarningResults;
 
 -- Recovery model, log reuse wait description, log file size, log usage size  (Query 31) (Database Properties)
 -- and compatibility level for all databases on instance
-SELECT db.[name] AS [Database Name], db.recovery_model_desc AS [Recovery Model], db.state_desc, db.containment_desc,
-db.log_reuse_wait_desc AS [Log Reuse Wait Description], 
+SELECT db.[name] AS [Database Name], SUSER_SNAME(db.owner_sid) AS [Database Owner], db.recovery_model_desc AS [Recovery Model], 
+db.state_desc, db.containment_desc, db.log_reuse_wait_desc AS [Log Reuse Wait Description], 
 CONVERT(DECIMAL(18,2), ls.cntr_value/1024.0) AS [Log Size (MB)], CONVERT(DECIMAL(18,2), lu.cntr_value/1024.0) AS [Log Used (MB)],
 CAST(CAST(lu.cntr_value AS FLOAT) / CAST(ls.cntr_value AS FLOAT)AS DECIMAL(18,2)) * 100 AS [Log Used %], 
 db.[compatibility_level] AS [DB Compatibility Level], 
 db.is_mixed_page_allocation_on, db.page_verify_option_desc AS [Page Verify Option], 
 db.is_auto_create_stats_on, db.is_auto_update_stats_on, db.is_auto_update_stats_async_on, db.is_parameterization_forced, 
 db.snapshot_isolation_state_desc, db.is_read_committed_snapshot_on, db.is_auto_close_on, db.is_auto_shrink_on, 
-db.target_recovery_time_in_seconds, db.is_cdc_enabled, db.is_published, db.is_distributor, db.is_encrypted,
+db.target_recovery_time_in_seconds, db.is_cdc_enabled, db.is_published, db.is_distributor,
 db.group_database_id, db.replica_id,db.is_memory_optimized_elevate_to_snapshot_on, 
 db.delayed_durability_desc, db.is_auto_create_stats_incremental_on,
 db.is_query_store_on, db.is_sync_with_backup, db.is_temporal_history_retention_enabled,
@@ -846,6 +857,7 @@ AS (SELECT wait_type, wait_time_ms/ 1000.0 AS [WaitS],
 		N'HADR_NOTIFICATION_DEQUEUE', N'HADR_TIMER_TASK', N'HADR_WORK_QUEUE',
         N'KSOURCE_WAKEUP', N'LAZYWRITER_SLEEP', N'LOGMGR_QUEUE', 
 		N'MEMORY_ALLOCATION_EXT', N'ONDEMAND_TASK_QUEUE',
+		N'PREEMPTIVE_HADR_LEASE_MECHANISM', N'PREEMPTIVE_SP_SERVER_DIAGNOSTICS',
 		N'PREEMPTIVE_OS_LIBRARYOPS', N'PREEMPTIVE_OS_COMOPS', N'PREEMPTIVE_OS_CRYPTOPS',
 		N'PREEMPTIVE_OS_PIPEOPS', N'PREEMPTIVE_OS_AUTHENTICATIONOPS',
 		N'PREEMPTIVE_OS_GENERICOPS', N'PREEMPTIVE_OS_VERIFYTRUST',
@@ -917,6 +929,10 @@ ORDER BY ec.client_net_address, es.[program_name] OPTION (RECOMPILE);
 
 -- This helps you figure where your database load is coming from
 -- and verifies connectivity from other machines
+
+-- Solving Connectivity errors to SQL Server
+-- https://support.microsoft.com/en-us/help/4009936/solving-connectivity-errors-to-sql-server
+
 
 
 -- Get Average Task Counts (run multiple times)  (Query 39) (Avg Task Counts)
@@ -1750,6 +1766,7 @@ CROSS APPLY sys.dm_exec_input_buffer(es.session_id, NULL) AS ib
 WHERE es.database_id = DB_ID()
 AND es.session_id > 50
 AND es.session_id <> @@SPID OPTION (RECOMPILE);
+------
 
 -- Gives you input buffer information from all non-system sessions for the current database
 -- Replaces DBCC INPUTBUFFER
@@ -1759,7 +1776,29 @@ AND es.session_id <> @@SPID OPTION (RECOMPILE);
 
 
 
--- Look at recent Full backups for the current database (Query 80) (Recent Full Backups)
+-- Get any resumable index rebuild operation information (Query 80) (Resumable Index Rebuild)
+SELECT OBJECT_NAME(iro.object_id) AS [Object Name], iro.index_id, iro.name AS [Index Name],
+       iro.sql_text, iro.last_max_dop_used, iro.partition_number, iro.state_desc, iro.start_time, iro.percent_complete
+FROM  sys.index_resumable_operations AS iro WITH (NOLOCK)
+OPTION (RECOMPILE);
+------ 
+
+-- index_resumable_operations (Transact-SQL)
+-- https://docs.microsoft.com/en-us/sql/relational-databases/system-catalog-views/sys-index-resumable-operations
+
+
+-- Get database automatic tuning options (Query 81) (Automatic Tuning Options)
+SELECT [name], desired_state_desc, actual_state_desc, reason_desc
+FROM sys.database_automatic_tuning_options WITH (NOLOCK)
+OPTION (RECOMPILE);
+------ 
+
+-- sys.database_automatic_tuning_options (Transact-SQL)
+-- https://docs.microsoft.com/en-us/sql/relational-databases/system-catalog-views/sys-database-automatic-tuning-options-transact-sql
+
+
+
+-- Look at recent Full backups for the current database (Query 82) (Recent Full Backups)
 SELECT TOP (30) bs.machine_name, bs.server_name, bs.database_name AS [Database Name], bs.recovery_model,
 CONVERT (BIGINT, bs.backup_size / 1048576 ) AS [Uncompressed Backup Size (MB)],
 CONVERT (BIGINT, bs.compressed_backup_size / 1048576 ) AS [Compressed Backup Size (MB)],
@@ -1809,7 +1848,3 @@ ORDER BY bs.backup_finish_date DESC OPTION (RECOMPILE);
 
 -- Microsoft IT Pro Cloud Essentials
 -- http://bit.ly/2443SAd
-
-
-
-
