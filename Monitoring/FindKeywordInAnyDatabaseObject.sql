@@ -3,7 +3,7 @@ DECLARE
  @Text nvarchar(4000)
 ;
 
-SET @Text = 'Mueller'
+SET @Text = '326918'
 ;
 
 -- Get the schema name, table name, and table type for:

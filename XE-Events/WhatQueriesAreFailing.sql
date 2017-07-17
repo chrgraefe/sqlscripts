@@ -32,7 +32,7 @@ GO
 /* ====================================================================================*/
 /* ====================================================================================*/
 
-IF EXISTS (SELECT OBJECT_ID('tempdb..#xmlprocess'))
+IF OBJECT_ID('tempdb..#xmlprocess') IS NOT NULL
 BEGIN
 	DROP TABLE #xmlprocess;
 END
@@ -67,6 +67,6 @@ x.event_data.value('(event/action[@name="tsql_stack"]/value)[1]', 'nvarchar(max)
 x.event_data
 FROM #xmlprocess x
 ORDER BY 
- [err_timestamp]
+ [err_timestamp] DESC
 , event_data.value('(event/action[@name="event_sequence"]/value)[1]', 'varchar(max)')
 ;
