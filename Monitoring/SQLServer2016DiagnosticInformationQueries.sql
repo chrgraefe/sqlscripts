@@ -1,8 +1,8 @@
 
 -- SQL Server 2016 Diagnostic Information Queries
 -- Glenn Berry 
--- August 2017
--- Last Modified: August 8, 2017
+-- September 2017
+-- Last Modified: September 4, 2017
 -- https://www.sqlskills.com/blogs/glenn/
 -- http://sqlserverperformance.wordpress.com/
 -- Twitter: GlennAlanBerry
@@ -98,6 +98,9 @@ SELECT @@SERVERNAME AS [Server Name], @@VERSION AS [SQL Server and OS Version In
 
 -- Download SQL Server Management Studio (SSMS)
 -- https://msdn.microsoft.com/en-us/library/mt238290.aspx	
+
+-- Update Center for Microsoft SQL Server
+-- http://bit.ly/2pZptuQ
 
 
 
