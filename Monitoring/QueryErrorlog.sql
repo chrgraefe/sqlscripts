@@ -15,9 +15,9 @@ SELECT
 *
 FROM #LOGINS
 WHERE
-	[Text] <> 'Login succeeded for user ''SV\techni''. Connection made using Windows authentication. [CLIENT: <local machine>]'
+	[Text] <> 'Login succeeded for user ''AD\techni''. Connection made using Windows authentication. [CLIENT: <local machine>]'
 AND [Text] <> 'Login succeeded for user ''NT-AUTORIT�T\NETZWERKDIENST''. Connection made using Windows authentication. [CLIENT: <local machine>]'
-AND [Text] <> 'Login succeeded for user ''SV\SQL_C07_STANDARD''. Connection made using Windows authentication. [CLIENT: <local machine>]'
+AND [Text] <> 'Login succeeded for user ''AD\SQL_C07_STANDARD''. Connection made using Windows authentication. [CLIENT: <local machine>]'
 AND [Text] <> 'Login succeeded for user ''dummy\Administrator''. Connection made using Windows authentication. [CLIENT: <local machine>]'
 AND [Text] <> 'Login succeeded for user ''dummy\Administrator''. Connection made using Windows authentication. [CLIENT: 172.24.52.7]'
 
@@ -30,6 +30,5 @@ WHERE
 	[Text] LIKE '%QSS_Admin%'
 OR  [Text] LIKE '%KV_Admin%'
 OR  [Text] LIKE '%Zoll_Admin%'
-OR  [Text] LIKE '%BKU\TobiasHanke%'
-OR  [Text] LIKE '%BKU\ChristianCGraefe%'
+OR  [Text] LIKE '%AS\dummy%'
 ;

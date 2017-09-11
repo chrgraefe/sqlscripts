@@ -1,31 +1,31 @@
 USE [msdb]
 GO
 
-/* Gewünschte Anmeldeinformationen */
+/* Gewï¿½nschte Anmeldeinformationen */
 CREATE CREDENTIAL SV_TECHNI
-WITH IDENTITY = 'SV\TECHNI', SECRET = 'RailionAG2008';
+WITH IDENTITY = 'AD\TECHNI', SECRET = '1234';
 GO
 
 /* Proxy erstellen */
 EXEC dbo.sp_add_proxy
     @proxy_name = 'PROXXY_SV_TECHNI',
     @enabled = 1,
-    @description = 'Technischer User für PowerShell',
+    @description = 'Technischer User fï¿½r PowerShell',
     @credential_name = 'SV_TECHNI' ;
 GO
 
-/* Zugriffsrechte für SQL-Agent-User erteilen */
+/* Zugriffsrechte fï¿½r SQL-Agent-User erteilen */
 EXEC msdb.dbo.sp_grant_login_to_proxy @proxy_name=N'PROXXY_SV_TECHNI', @login_name=N'NT SERVICE\SQLSERVERAGENT'
 GO
 
 /* Test ob Proxy angelegt wurde*/
 SELECT * FROM msdb.dbo.sysproxies
 
-/* Liste aller verfügbaren SQL-Agent-Subsysteme */
+/* Liste aller verfï¿½gbaren SQL-Agent-Subsysteme */
 EXEC sp_enum_sqlagent_subsystems 
 GO
 
-/* Zugriff für den Proxy auf das gewünschte Subsystem festelegen */
+/* Zugriff fï¿½r den Proxy auf das gewï¿½nschte Subsystem festelegen */
 EXEC msdb.dbo.sp_grant_proxy_to_subsystem 
 @proxy_name=N'PROXXY_SV_TECHNI', 
 @subsystem_id = 3 /* CMDEXEC */
@@ -46,24 +46,24 @@ GO
 --USE [msdb]
 --GO
 
---/* Gewünschte Anmeldeinformationen */
+--/* Gewï¿½nschte Anmeldeinformationen */
 --CREATE CREDENTIAL SV_SQLMDWPROXY
---WITH IDENTITY = 'SV\SQLMDWPROXY', SECRET = 'UMmXFnq4xShledikAkpy';
+--WITH IDENTITY = 'AD\SQLMDWPROXY', SECRET = 'UMmXFnq4xShledikAkpy';
 --GO
 
 --/* Proxy erstellen */
 --EXEC dbo.sp_add_proxy
 --    @proxy_name = 'PROXXY_SV_SQLMDWPROXY',
 --    @enabled = 1,
---    @description = 'Technischer User für SQL Management DWH',
+--    @description = 'Technischer User fï¿½r SQL Management DWH',
 --    @credential_name = 'SV_SQLMDWPROXY' ;
 --GO
 
---/* Zugriffsrechte für SQL-Agent-User erteilen */
-----EXEC msdb.dbo.sp_grant_login_to_proxy @proxy_name=N'PROXXY_SV_SQLMDWPROXY', @login_name=N'SV\TECHNI'
+--/* Zugriffsrechte fï¿½r SQL-Agent-User erteilen */
+----EXEC msdb.dbo.sp_grant_login_to_proxy @proxy_name=N'PROXXY_SV_SQLMDWPROXY', @login_name=N'AD\TECHNI'
 ----GO
 
---/* Zugriff für den Proxy auf das gewünschte Subsystem festelegen */
+--/* Zugriff fï¿½r den Proxy auf das gewï¿½nschte Subsystem festelegen */
 --EXEC msdb.dbo.sp_grant_proxy_to_subsystem 
 --@proxy_name=N'PROXXY_SV_SQLMDWPROXY', 
 --@subsystem_id = 3 /* CMDEXEC */

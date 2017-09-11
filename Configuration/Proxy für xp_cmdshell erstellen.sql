@@ -2,20 +2,20 @@ USE MASTER;
 GO
 
 /*
-Muss als lokaler Administrator auf dem jeweiligen Server ausgeführt werden
+Muss als lokaler Administrator auf dem jeweiligen Server ausgefï¿½hrt werden
 */
 
-/* Erstelle den LOGIN für das Proxy-Konto falls dieses noch nicht existiert */
+/* Erstelle den LOGIN fï¿½r das Proxy-Konto falls dieses noch nicht existiert */
 IF NOT EXISTS 
     (SELECT name  
      FROM master.sys.server_principals
-     WHERE name = 'SV\TECHNI')
+     WHERE name = 'AD\TECHNI')
 BEGIN
-	CREATE LOGIN [SV\TECHNI] FROM WINDOWS;
+	CREATE LOGIN [AD\TECHNI] FROM WINDOWS;
 END
 
 /* Hinterlegung von Konto und Passwort */
-EXEC sp_xp_cmdshell_proxy_account 'SV\TECHNI', 'RailionAG2008' ;
+EXEC sp_xp_cmdshell_proxy_account 'AD\123', '1234' ;
 
 --Create the database role and assign rights to the role
 IF DATABASE_PRINCIPAL_ID('role_CmdShell_Executor') IS NULL 
@@ -27,4 +27,4 @@ END
 GRANT EXEC ON xp_cmdshell TO [role_CmdShell_Executor]
 
 
-EXEC sp_addrolemember [role_CmdShell_Executor], [BKU\NicoleMueller];
+EXEC sp_addrolemember [role_CmdShell_Executor], [AD\dummy];
