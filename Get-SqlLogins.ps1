@@ -1,7 +1,7 @@
 Install-Module dbatools -Scope CurrentUser
 
 #Get a list of instances where you will run the command through
-$SQLServers = { "cargomnzsr02.sv.db.de\ENTWICKLUNG", "cargomnzsr07.sv.db.de" }
+$SQLServers = { "dummy.sv.db.de\ENTWICKLUNG", "dummy.sv.db.de" }
 
 #If the folder does not exists create it
 $newFolder = "D:\WORKING\temp\ExportLogins\$(Get-Date -f MM-dd-yyyy_HH_mm_ss)"

@@ -11,7 +11,7 @@ EXEC msdb.dbo.sp_add_operator @name=N'The DBA Team',
 		@sunday_pager_start_time=90000, 
 		@sunday_pager_end_time=180000, 
 		@pager_days=0, 
-		@email_address=N'L-BICC@deutschebahn.com;Dieter.Metzenroth@deutschebahn.com;Christian.C.Graefe@deutschebahn.com;chr.Graefe@gmail.com', 
+		@email_address=N'chr.Graefe@gmail.com', 
 		@category_name=N'[Uncategorized]'
 		;
 

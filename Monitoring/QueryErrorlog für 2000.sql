@@ -15,11 +15,11 @@ SELECT
 *
 FROM #LOGINS
 --WHERE
---	[Text] <> 'Login succeeded for user ''SV\techni''. Connection made using Windows authentication. [CLIENT: <local machine>]'
---AND [Text] <> 'Login succeeded for user ''BKU\ChristianCGraefe''. Connection made using Windows authentication. [CLIENT: 172.24.209.92]'
---AND [Text] <> 'Login succeeded for user ''NT-AUTORITÄT\NETZWERKDIENST''. Connection made using Windows authentication. [CLIENT: <local machine>]'
+--	[Text] <> 'Login succeeded for user ''SV\t123''. Connection made using Windows authentication. [CLIENT: <local machine>]'
+--AND [Text] <> 'Login succeeded for user ''AD\123''. Connection made using Windows authentication. [CLIENT: ]'
+--AND [Text] <> 'Login succeeded for user ''NT-AUTORITï¿½T\NETZWERKDIENST''. Connection made using Windows authentication. [CLIENT: <local machine>]'
 --AND [Text] <> 'Login succeeded for user ''SV\SQL_C07_STANDARD''. Connection made using Windows authentication. [CLIENT: <local machine>]'
---AND [Text] <> 'Login succeeded for user ''CARGOMNZSR11\Administrator''. Connection made using Windows authentication. [CLIENT: <local machine>]'
---AND [Text] <> 'Login succeeded for user ''CARGOMNZSR11\Administrator''. Connection made using Windows authentication. [CLIENT: 172.24.52.7]'
+--AND [Text] <> 'Login succeeded for user ''dummy\Administrator''. Connection made using Windows authentication. [CLIENT: <local machine>]'
+--AND [Text] <> 'Login succeeded for user ''dummy\Administrator''. Connection made using Windows authentication. []'
 ----AND [Text] LIKE '%muss%'
 ;

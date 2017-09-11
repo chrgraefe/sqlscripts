@@ -9,21 +9,21 @@ GO
 -- Create a Database Mail account
 EXECUTE msdb.dbo.sysmail_add_account_sp
     @account_name = 'MAIL-ACCOUNT',
-    @description = 'Account für gesamten Mailverkehr.',
-    @email_address = 'l-bicc@deutschebahn.com',
-    @replyto_address = 'l-bicc@deutschebahn.com',
+    @description = 'Account fï¿½r gesamten Mailverkehr.',
+    @email_address = 'l-bicc@123.com',
+    @replyto_address = 'l-bicc@123.com',
     @display_name = 'L-BICC',
-    @mailserver_name = 'cargomnzsr07.sv.db.de';
+    @mailserver_name = 'dummy.sv.db.de';
  
 -- Create a Database Mail profile
 EXECUTE msdb.dbo.sysmail_add_profile_sp
     @profile_name = 'Standard Profil',
-    @description = 'Standard Profil für alle Benutzer';
+    @description = 'Standard Profil fï¿½r alle Benutzer';
 
 -- Create a Database Mail profile
 EXECUTE msdb.dbo.sysmail_add_profile_sp
-    @profile_name = 'EMAIL_VERSAND_UEBER_CARGOMNZSR07',
-    @description = 'Standard Profil für alle Benutzer';
+    @profile_name = 'EMAIL_VERSAND_UEBER_dummy',
+    @description = 'Standard Profil fï¿½r alle Benutzer';
 
 
 	
@@ -36,7 +36,7 @@ EXECUTE msdb.dbo.sysmail_add_profileaccount_sp
 
 -- Add the mail account to the profile
 EXECUTE msdb.dbo.sysmail_add_profileaccount_sp
-    @profile_name = 'EMAIL_VERSAND_UEBER_CARGOMNZSR07',
+    @profile_name = 'EMAIL_VERSAND_UEBER_dummy',
     @account_name = 'MAIL-ACCOUNT',
     @sequence_number = 1;
 
@@ -48,7 +48,7 @@ EXECUTE msdb.dbo.sysmail_add_principalprofile_sp
 
 -- Grant access to the profile to all msdb database users
 EXECUTE msdb.dbo.sysmail_add_principalprofile_sp
-    @profile_name = 'EMAIL_VERSAND_UEBER_CARGOMNZSR07',
+    @profile_name = 'EMAIL_VERSAND_UEBER_dummy',
     @principal_name = 'public',
     @is_default = 0;
 
@@ -75,9 +75,9 @@ ALTER DATABASE msdb SET ENABLE_BROKER /* SQL_Agent vorher stoppen, sonst wird ke
 
 --send a test email
 EXECUTE msdb.dbo.sp_send_dbmail
-	@profile_name = 'EMAIL_VERSAND_UEBER_CARGOMNZSR07',
+	@profile_name = 'EMAIL_VERSAND_UEBER_dummy',
     @subject = 'Test Database Mail Message',
-    @recipients = 'christian.c.graefe@deutschebahn.com',
+    @recipients = 'noname@123.com',
     @body = 'SELECT 1; ';
 
 GO
@@ -86,7 +86,7 @@ GO
 EXECUTE msdb.dbo.sp_send_dbmail
 	@profile_name = 'Standard Profil',
     @subject = 'Test Database Mail Message',
-    @recipients = 'christian.c.graefe@deutschebahn.com',
+    @recipients = 'noname@123.com',
     @body = 'SELECT 1; ';
 
 GO
