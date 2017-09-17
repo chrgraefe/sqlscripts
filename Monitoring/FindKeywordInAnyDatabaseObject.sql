@@ -3,7 +3,7 @@ DECLARE
  @Text nvarchar(4000)
 ;
 
-SET @Text = 'abcd'
+SET @Text = 'TLR_DATEI_KUERZEL'
 ;
 
 -- Get the schema name, table name, and table type for:
