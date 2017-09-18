@@ -3,7 +3,7 @@ DECLARE
  @Text nvarchar(4000)
 ;
 
-SET @Text = 'TLR_DATEI_KUERZEL'
+SET @Text = 'FTP_BASE_DIR'
 ;
 
 -- Get the schema name, table name, and table type for:
