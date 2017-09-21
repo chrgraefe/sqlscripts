@@ -3,7 +3,7 @@ DECLARE
  @Text nvarchar(4000)
 ;
 
-SET @Text = 'FTP_BASE_DIR'
+SET @Text = 'AUFTRNR'
 ;
 
 -- Get the schema name, table name, and table type for:
