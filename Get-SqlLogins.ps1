@@ -1,21 +1,21 @@
-Install-Module dbatools -Scope CurrentUser
+Import-Module dbatools
 
 #Get a list of instances where you will run the command through
-$SQLServers = { "dummy.sv.db.de\ENTWICKLUNG", "dummy.sv.db.de" }
+$SQLServers = @( "localhost\SQL2016", "localhost\SQL2016" )
 
 #If the folder does not exists create it
-$newFolder = "D:\WORKING\temp\ExportLogins\$(Get-Date -f MM-dd-yyyy_HH_mm_ss)"
+$newFolder = "C:\temp\ExportLogins\$(Get-Date -f MM-dd-yyyy_HH_mm_ss)"
 if ((Test-Path -LiteralPath $newFolder) -eq $false) {
     New-Item -Type Directory -Path $newFolder
 }
 
 #For each instance 
-$SQLServers | Foreach-Object {
+Foreach ($InstanceName in $SQLServers) {
     
     #generate a filename
-    $fileName = $_.InstanceConnection -replace ",", "_"
+    $fileName = $InstanceName -replace ",", "_"
     $fileName = $fileName -replace "\\", "_"
 
     #run the Export-SqlLogin command
-    Export-SqlLogin -SqlInstance $_.InstanceConnection -FilePath "$newFolder\$fileName.sql" 
+    Export-DbaLogin -SqlInstance $InstanceName -FilePath "$newFolder\$fileName.sql" 
 }
