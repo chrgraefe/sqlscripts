@@ -1,4 +1,4 @@
-/* USE ALF */ --Set db name before running using drop-down above or this USE statement
+/* USE ??? */ --Set db name before running using drop-down above or this USE statement
 
 DECLARE @file_name sysname,
 @file_size int,

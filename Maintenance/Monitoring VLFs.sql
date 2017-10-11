@@ -36,7 +36,7 @@ ORDER BY FSeqNo
 
 
 /*
-Größenanpassung des TRANSACTION-Logs#
+Grï¿½ï¿½enanpassung des TRANSACTION-Logs#
 
 */
 
@@ -51,9 +51,9 @@ where
 DBCC SHRINKFILE(transactionloglogicalfilename, TRUNCATEONLY)
 
 
---Alter the database to modify the transaction log file to the appropriate size – in one step
+--Alter the database to modify the transaction log file to the appropriate size ï¿½ in one step
 
-ALTER DATABASE [DPS]
+ALTER DATABASE [???]
 MODIFY FILE 
 ( 
       NAME = transactionloglogicalfilename 

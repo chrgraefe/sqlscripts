@@ -20,7 +20,7 @@ LEFT OUTER JOIN sys.destination_data_spaces dds ON
 AND p.partition_number=dds.destination_id 
 INNER JOIN sys.filegroups fg ON 
 	COALESCE(dds.data_space_id, i.data_space_id)=fg.data_space_id 
-where t.name = 'T_BV_RDE_DPS_SENDUNG'
-AND OBJECT_SCHEMA_NAME(t.object_id) = 'DPS_DATA'
+where t.name = '????'
+AND OBJECT_SCHEMA_NAME(t.object_id) = 'SCHEMA???'
 ORDER BY
 	schema_name, table_name
