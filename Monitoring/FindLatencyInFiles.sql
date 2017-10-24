@@ -1,10 +1,10 @@
 /*
 Excellent: < 1ms
 Very good: < 5ms
-Good: 5 – 10ms
-Poor: 10 – 20ms
-Bad: 20 – 100ms
-Really bad: 100 – 500ms
+Good: 5 - 10ms
+Poor: 10 - 20ms
+Bad: 20 - 100ms
+Really bad: 100 - 500ms
 OMG!: > 500ms
 
 
