@@ -1,8 +1,7 @@
 
 -- SQL Server 2012 Diagnostic Information Queries
 -- Glenn Berry 
--- September 2017
--- Last Modified: September 4, 2017
+-- Last Modified: October 10, 2017
 -- https://www.sqlskills.com/blogs/glenn/
 -- http://sqlserverperformance.wordpress.com/
 -- Twitter: GlennAlanBerry
@@ -50,8 +49,8 @@ IF NOT EXISTS (SELECT * WHERE CONVERT(varchar(128), SERVERPROPERTY('ProductVersi
 SELECT @@SERVERNAME AS [Server Name], @@VERSION AS [SQL Server and OS Version Info];
 ------
 
--- SQL Server 2012 RTM Branch Builds						SQL Server 2012 SP1 Branch Builds					SQL Server 2012 SP2 Branch Builds						SQL Server 2012 SP3 Branch Builds
--- Build			Description			Release Date		Build			Description		Release Date		Build			Description		    Release Date        Build			Description		    Release Date
+-- SQL Server 2012 RTM Branch Builds						SQL Server 2012 SP1 Branch Builds					SQL Server 2012 SP2 Branch Builds						SQL Server 2012 SP3 Branch Builds					SQL Server 2012 SP4 Branch Builds
+-- Build			Description			Release Date		Build			Description		Release Date		Build			Description		    Release Date        Build			Description		    Release Date	Build			Description		    Release Date
 -- 11.0.2100		RTM					  3/6/2012  
 -- 11.0.2316		RTM CU1				 4/12/2012
 -- 11.0.2325        RTM CU2				 6/18/2012 -->		11.0.3000		SP1 RTM			11/7/2012
@@ -87,7 +86,7 @@ SELECT @@SERVERNAME AS [Server Name], @@VERSION AS [SQL Server and OS Version In
 --																																									   11.0.6594		SP3 CU8			 3/20/2017
 --																																									   11.0.6598		SP3 CU9			 5/15/2017																											                                                            				
 --																																									   11.0.6607		SP3 CU10		  8/8/2017																											
-
+--																																																							11.0.7001		SP4 RTM			10/3/2017	
 
 -- How to determine the version, edition and update level of SQL Server and its components 
 -- https://support.microsoft.com/en-us/kb/321185
@@ -222,6 +221,9 @@ DBCC TRACESTATUS (-1);
 
 -- TF 6534 - Enables use of native code to improve performance with spatial data
 --           https://blogs.msdn.microsoft.com/bobsql/2016/06/03/sql-2016-it-just-runs-faster-native-spatial-implementations/
+
+-- TF 8079 - Enables automatic soft-NUMA on systems with eight or more physical cores per NUMA node (with SQL Server 2012 SP4)
+--           https://blogs.msdn.microsoft.com/sqlreleaseservices/sql-server-2012-service-pack-4-sp4-released/
 
 -- SQL Server query optimizer hotfix trace flag 4199 servicing model
 -- https://support.microsoft.com/en-us/kb/974006
@@ -959,7 +961,7 @@ AND counter_name = N'Page life expectancy' OPTION (RECOMPILE);
 -- Higher PLE is better. Watch the trend over time, not the absolute value
 -- This will only return one row for non-NUMA systems
 
--- Page Life Expectancy isn’t what you think…
+-- Page Life Expectancy isnâ€™t what you thinkâ€¦
 -- https://www.sqlskills.com/blogs/paul/page-life-expectancy-isnt-what-you-think/
 
 
@@ -1292,7 +1294,8 @@ INNER JOIN sys.dm_db_missing_index_details AS mid WITH (NOLOCK)
 ON mig.index_handle = mid.index_handle
 INNER JOIN sys.partitions AS p WITH (NOLOCK)
 ON p.[object_id] = mid.[object_id]
-WHERE mid.database_id = DB_ID() 
+WHERE mid.database_id = DB_ID()
+AND p.index_id < 2 
 ORDER BY index_advantage DESC OPTION (RECOMPILE);
 ------
 
@@ -1528,13 +1531,13 @@ ORDER BY bs.backup_finish_date DESC OPTION (RECOMPILE);
 
 -- These three Pluralsight Courses go into more detail about how to run these queries and interpret the results
 
--- SQL Server 2014 DMV Diagnostic Queries – Part 1 
+-- SQL Server 2014 DMV Diagnostic Queries â€“ Part 1 
 -- https://www.pluralsight.com/courses/sql-server-2014-dmv-diagnostic-queries-part1
 
--- SQL Server 2014 DMV Diagnostic Queries – Part 2
+-- SQL Server 2014 DMV Diagnostic Queries â€“ Part 2
 -- https://www.pluralsight.com/courses/sql-server-2014-dmv-diagnostic-queries-part2
 
--- SQL Server 2014 DMV Diagnostic Queries – Part 3
+-- SQL Server 2014 DMV Diagnostic Queries â€“ Part 3
 -- https://www.pluralsight.com/courses/sql-server-2014-dmv-diagnostic-queries-part3
 
 
