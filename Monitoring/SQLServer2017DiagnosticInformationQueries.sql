@@ -1,7 +1,7 @@
 
 -- SQL Server 2017 Diagnostic Information Queries
 -- Glenn Berry 
--- Last Modified: October 24, 2017
+-- Last Modified: October 30, 2017
 -- https://www.sqlskills.com/blogs/glenn/
 -- http://sqlserverperformance.wordpress.com/
 -- Twitter: GlennAlanBerry
@@ -61,11 +61,15 @@ SELECT @@SERVERNAME AS [Server Name], @@VERSION AS [SQL Server and OS Version In
 -- 14.0.800.90		RC1					7/17/2017
 -- 14.0.900.75		RC2					8/2/2017
 -- 14.0.1000.169	RTM					10/2/2017
+-- 14.0.3006.16		CU1					10/24/2017
 		
 															
 
 -- How to determine the version, edition and update level of SQL Server and its components 
 -- https://support.microsoft.com/en-us/kb/321185
+
+-- SQL Server 2017 build versions
+-- https://support.microsoft.com/en-us/help/4047329/sql-server-2017-build-versions
 
 -- Microsoft for the Modern Data Estate
 -- https://blogs.technet.microsoft.com/dataplatforminsider/2017/09/25/microsoft-for-the-modern-data-estate/
@@ -306,11 +310,8 @@ FROM sys.dm_os_host_info WITH (NOLOCK) OPTION (RECOMPILE);
 
 -- SQL Server 2017 requires Windows Server 2012 or newer
 
--- Quick-Start Installation of SQL Server 2016
--- https://msdn.microsoft.com/en-us/library/bb500433(v=sql.130).aspx
-
--- Hardware and Software Requirements for Installing SQL Server 2016
--- https://msdn.microsoft.com/en-us/library/ms143506(v=sql.130).aspx
+-- Hardware and Software Requirements for Installing SQL Server
+-- https://docs.microsoft.com/en-us/sql/sql-server/install/hardware-and-software-requirements-for-installing-sql-server
 
 -- Using SQL Server in Windows 8 and later versions of Windows operating system 
 -- https://support.microsoft.com/en-us/kb/2681562
