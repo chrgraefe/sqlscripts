@@ -59,7 +59,7 @@ Foreach ($instance in $instances) {
  #   New-DbaAgentSchedule -SqlInstance $instance -Job $jobSystemDbFull -Schedule "schedule_$jobSystemDbFull" -FrequencyType Weekly -FrequencyInterval Sunday -FrequencyRecurrenceFactor 1 -StartDate "20170101" -StartTime "000000" -EndDate "20991231" -EndTime "235959"
 
     # DatabaseBackup - USER_DATABASES - FULL
-   # Get-DbaAgentSchedule -SqlInstance $instance -Schedule "schedule_$jobUserDbFull" | Remove-DbaAgentSchedule
+    Get-DbaAgentSchedule -SqlInstance $instance -Schedule "schedule_$jobUserDbFull" | Remove-DbaAgentSchedule
   #  New-DbaAgentSchedule -SqlInstance $instance -Job $jobUserDbFull -Schedule "schedule_$jobUserDbFull" -FrequencyType Weekly -FrequencyInterval Sunday -FrequencyRecurrenceFactor 1 -StartDate "20170101" -StartTime "000000" -EndDate "20991231" -EndTime "235959"
 
     # DatabaseBackup - USER_DATABASES - FULL
