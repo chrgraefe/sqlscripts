@@ -1,3 +1,5 @@
+DECLARE @TEXT NVARCHAR(128)= 'pub_GetDetails'
+
 -- Get the schema name, table name, and table type for:
 -- Table names
 SELECT
