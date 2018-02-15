@@ -8,7 +8,8 @@
     , so.name ObjectName
     , so.type_desc ObjectDescription
     , case
-        when sysType.name IN (N'char', N'nchar', N'varchar', N'nvarchar') then sysType.name+'('+IIF(sc.max_length=-1, 'max' ,cast(sc.max_length as varchar(5))) +')'
+        when sysType.name IN (N'char', N'varchar') then sysType.name+'('+IIF(sc.max_length=-1, 'max' ,cast(sc.max_length as varchar(5))) +')'
+        when sysType.name IN (N'nchar', N'nvarchar') then sysType.name+'('+IIF(sc.max_length=-1, 'max' ,cast(sc.max_length / 2 as varchar(5))) +')'
         when sysType.name IN (N'decimal') then sysType.name+'('+ cast(sc.precision as varchar(2)) + ', ' + cast(sc.scale as varchar(2)) + ')'
         else sysType.name
     end TypeSyntax
@@ -30,7 +31,8 @@
     , so.name ObjectName
     , so.type_desc ObjectDescription
     ,case
-        when sysType.name IN (N'char', N'nchar', N'varchar', N'nvarchar') then sysType.name+'('+IIF(sc.max_length=-1, 'max' ,cast(sc.max_length as varchar(5))) +')'
+        when sysType.name IN (N'char', N'varchar') then sysType.name+'('+IIF(sc.max_length=-1, 'max' ,cast(sc.max_length as varchar(5))) +')'
+        when sysType.name IN (N'nchar', N'nvarchar') then sysType.name+'('+IIF(sc.max_length=-1, 'max' ,cast(sc.max_length / 2 as varchar(5))) +')'
         when sysType.name IN (N'decimal') then sysType.name+'('+ cast(sc.precision as varchar(2)) + ', ' + cast(sc.scale as varchar(2)) + ')'
         else sysType.name
     end TypeSyntax
@@ -56,10 +58,11 @@
     , so.type_desc ObjectDescription
 
     ,CASE
-            when sysType.name IN (N'char', N'nchar', N'varchar', N'nvarchar') then sysType.name+'('+IIF(param.max_length=-1, 'max' ,cast(param.max_length as varchar(5))) +')'
-            when sysType.name IN (N'decimal') then sysType.name+'('+ cast(param.precision as varchar(2)) + ', ' + cast(param.scale as varchar(2)) + ')'
-            else sysType.name
-        end TypeSyntax
+        when sysType.name IN (N'char', N'varchar') then sysType.name+'('+IIF(param.max_length=-1, 'max' ,cast(param.max_length as varchar(5))) +')'
+        when sysType.name IN (N'nchar', N'nvarchar') then sysType.name+'('+IIF(param.max_length=-1, 'max' ,cast(param.max_length / 2 as varchar(5))) +')'
+        when sysType.name IN (N'decimal') then sysType.name+'('+ cast(param.precision as varchar(2)) + ', ' + cast(param.scale as varchar(2)) + ')'
+        else sysType.name
+     end TypeSyntax
     from sys.parameters param
     inner join sys.objects so 
         ON so.object_id = param.object_id
@@ -128,6 +131,8 @@ SELECT
 FROM columnsWithDifferentTypesButSameName cteRelevantColumns
 INNER JOIN AggregationOfAllTypes cteAllColumns 
     ON cteRelevantColumns.ColumnName = cteAllColumns.ColumnName
+WHERE cteRelevantColumns.ColumnName NOT IN ('ReturnValueOfScalarFunction')
 ORDER BY
  cteAllColumns.ColumnName
 ,cteAllColumns.ObjectName
+;
